@@ -1,0 +1,13 @@
+
+ mat-form-field,
+ textarea {
+  width: 98%;
+
+ }
+ .mat-mdc-raised-button.mat-primary {
+    width: 45px;
+    margin: 0 0 15px 25px;
+  }
+  mat-card {
+    margin-bottom: 1rem;
+  }
