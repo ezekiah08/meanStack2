@@ -4,7 +4,6 @@ import { ActivatedRoute, ParamMap } from "@angular/router";
 
 import { PostsService } from "src/app/post/post.service";
 import { Post } from "../post.model";
-import { response } from "express";
 
 @Component({
   selector: 'app-post-create',
@@ -15,30 +14,36 @@ import { response } from "express";
 export class PostCreateComponent implements OnInit {
   enteredTitle = '';
   enteredContent = '';
-  post: Post ;
+  private postId: string;
+  private mode = 'create'
+  post: Post;
 
-  public postId: string;
-  public mode = 'create'
+constructor(public postsService: PostsService, public route: ActivatedRoute ) {}
 
 
-
-constructor(private postsService: PostsService, public route: ActivatedRoute ) {}
-
-  ngOnInit() {
-    this.post = {id: "", title: "", content: ""}
+  ngOnInit()  {
+     this.post =
+    {
+      id: "" ,
+     title: "",
+     content: ""
+    }
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       if (paramMap.has('postId')) {
         this.mode = 'edit';
         this.postId = paramMap.get('postId') || "";
-      // this.post =
-      this.postsService.getPost(this.postId) ;
-      }else {
-        this.mode = 'create'
+        this.post = this.postsService.getPost(this.postId);
+      } else {
+        this.mode = 'create';
         this.postId = "";
       }
     })
   };
-  
+
+
+
+
+
 
 
   onAddPost(form: NgForm) {

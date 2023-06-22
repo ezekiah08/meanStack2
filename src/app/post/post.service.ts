@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Subject } from "rxjs";
+import { Subject} from "rxjs";
 import { map } from "rxjs/operators"
 import { HttpClient } from '@angular/common/http'
 
@@ -9,6 +9,7 @@ import { Post } from "./post.model";
 export class PostsService {
    posts : Post[] = [];
   private postsUpdate = new Subject<Post[]>();
+  prisma: any;
 
 
   constructor(private http: HttpClient) {}
@@ -17,11 +18,11 @@ export class PostsService {
     this.http.get<{message: string, posts: any}>
     ('http://localhost:3000/api/posts')
     .pipe(map((postData) => {
-      return postData.posts.map((post: { title: ''; content: ''; _id: ""; }) => {
+      return postData.posts.map((post: { title: ''; content: ''; id: ''; }) => {
         return {
           title: post.title,
           content: post.content,
-          id: post._id
+          id: post.id
         }
       })
     }))
@@ -37,11 +38,12 @@ export class PostsService {
     return this.postsUpdate.asObservable()
   };
 
-  getPost(id: string) {
-    return {...this.posts.find(p => p.id === id)}
+   getPost(id: string) {
+    return ({...this.posts.find(p => p.id === id)
+    })
   }
 
-  addPost(title: string, content: string) {
+  addPost( title: string, content: string) {
     const post: Post =  {
       title: title, content: content,
       id: ''
